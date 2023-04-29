@@ -9,3 +9,16 @@ img {
 .margin-top {
     margin-top: 20px;
 }
+
+.btn-margin {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.flex-container {
+    display: flex;
+  }
+  .center-center {
+    justify-content: center;
+    align-items: center;
+  }
