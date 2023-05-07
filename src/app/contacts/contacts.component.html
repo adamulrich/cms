@@ -1,1 +1,20 @@
-<p>contacts works!</p>
+<div class="row">
+    <div class="col-md-5 gutter-margin">
+        <cms-contact-list 
+            (selectedContactEvent)="selectedContact = $event"
+            >
+        </cms-contact-list>
+    </div>
+    <div class="col-md-4">
+        <cms-contact-detail 
+            *ngIf="selectedContact; else infoText"
+            [contact]="selectedContact"
+        >
+
+        </cms-contact-detail>
+        <ng-template #infoText>
+            <p>Please select a contact</p>
+        </ng-template>
+    
+    </div>
+</div>
