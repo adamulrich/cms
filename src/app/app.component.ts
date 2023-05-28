@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'cms-root',
@@ -7,17 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'cms';
-  selectedFeature: string = '';
 
   ngOnInit(): void {
     
   }
 
   constructor() {}
-
-
-  switchView(selectedFeature: string) {
-    this.selectedFeature = selectedFeature; 
-  }
 
 }
