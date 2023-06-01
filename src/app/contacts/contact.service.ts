@@ -1,22 +1,27 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import {Contact} from './contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
-
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
+
   contacts: Contact[] = [];
-  contactSelectedEvent = new EventEmitter<Contact>();
-  contactChangedEvent = new EventEmitter<Contact[]>();
+  maxContactId: number = 0;
+  contactsListChangedEvent = new Subject<Contact[]>();
 
    constructor() {
       this.contacts = MOCKCONTACTS;
+      this.maxContactId = this.getMaxId();
+      console.log(this.maxContactId);
    }
   
-  getContacts(): Contact[] {
-    return this.contacts.sort(this.sort_function).slice()
+  
+  
+   getContacts(): Contact[] {
+    return this.contacts; //.sort(this.sort_function).slice()
   }
 
   getContact(id: string): Contact {
@@ -37,14 +42,52 @@ export class ContactService {
   deleteContact(contact: Contact) {
     if (!contact) {
       return;
-   }
-   const pos = this.contacts.indexOf(contact);
-   if (pos < 0) {
+     }
+     const pos = this.contacts.indexOf(contact);
+    if (pos < 0) {
       return;
-   }
-   this.contacts.splice(pos, 1);
-   this.contactChangedEvent.emit(this.contacts.slice());
-   }
+    }
+    this.contacts.splice(pos, 1);
+    this.contactsListChangedEvent.next(this.contacts.slice());
+  }
 
+  updateContact(originalDoc: Contact, newDoc: Contact) {
+    if (!newDoc && !originalDoc) {
+      return
+    }
+
+    const position = this.contacts.indexOf(originalDoc);
+    if (position < 0) {
+      return
+    }
+
+    newDoc.id = originalDoc.id;
+    this.contacts[position] = newDoc
+
+    var contactsListClone = this.contacts.slice();
+    this.contactsListChangedEvent.next(contactsListClone)
+
+  }
+  
+
+  addcontact(newcontact: Contact) {
+    if (!newcontact) {
+      return
+    }
+
+    this.maxContactId ++;
+
+    newcontact.id = this.maxContactId.toString();
+    this.contacts.push(newcontact);
+
+    var contactsListClone = this.contacts.slice();
+    this.contactsListChangedEvent.next(contactsListClone)
+
+  }
+
+  getMaxId(): number  {
+  
+    return Math.max(...this.contacts.map(d => +d.id),0)
+  }
   
 }

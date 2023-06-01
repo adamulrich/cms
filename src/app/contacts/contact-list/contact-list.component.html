@@ -9,9 +9,9 @@
             </div>
         </div>
         <div class="col-xs-12 panel-body">
-            <cms-contact-item *ngFor="let contactElement of contacts"
+            <cms-contact-item 
+            *ngFor="let contactElement of contacts"
             [contact]="contactElement"
-            (click)="onSelected(contactElement)"
             ></cms-contact-item>
         </div>
     </div>

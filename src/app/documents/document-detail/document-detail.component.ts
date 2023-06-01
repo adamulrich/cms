@@ -21,9 +21,8 @@ export class DocumentDetailComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private windRefService: WindRefService) {
                 
-              }
+  }
   
-
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(
       (params: Params) => {
@@ -35,16 +34,17 @@ export class DocumentDetailComponent implements OnInit {
     
   }
 
+  onDelete() {
+    this.documentService.deleteDocument(this.document);
+    this.router.navigate(['/documents'])
+ 
+  }
+
   onView() {
     if (this.document.url) {
       this.nativeWindow.open(this.document.url);
     }
     this.nativeWindow
   }
-
-  onDelete() {
-    this.documentService.deleteDocument(this.document);
-    this.router.navigate(['/documents'])
- }
 }
 
