@@ -30,6 +30,8 @@ export class DocumentService {
   
   updateDocument(originalDoc: Document, newDoc: Document) {
     if (!newDoc && !originalDoc) {
+      // console.log(newDoc);
+      // console.log(originalDoc);
       return
     }
 
@@ -41,6 +43,8 @@ export class DocumentService {
     newDoc.id = originalDoc.id;
     this.documents[position] = newDoc
 
+    console.log(newDoc);
+    console.log(position);
     var documentsListClone = this.documents.slice();
     this.documentListChangedEvent.next(documentsListClone)
 
@@ -52,6 +56,7 @@ export class DocumentService {
       return
     }
 
+    console.log('here');
     this.maxDocumentId ++;
 
     newDocument.id = this.maxDocumentId.toString();

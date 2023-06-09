@@ -20,7 +20,8 @@ import { MessageService } from './messages/message.service';
 import { RouterModule} from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
-
+import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -39,13 +40,16 @@ import { DocumentEditComponent } from './documents/document-edit/document-edit.c
     MessageListComponent,
     DropdownDirective,
     DocumentEditComponent,
+    ContactEditComponent,
 
 
   ],
   imports: [
     BrowserModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
