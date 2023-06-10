@@ -33,6 +33,11 @@ export class ContactDetailComponent implements OnInit {
     
   }
 
+  onEdit() {
+  
+    this.router.navigate(['/edit', {relativeTo: this.activatedRoute}] );
+  }
+
   onDelete() {
     this.contactService.deleteContact(this.contact);
     this.router.navigate(['/contacts']);
