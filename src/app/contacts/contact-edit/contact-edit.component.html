@@ -1,15 +1,19 @@
 <div class="panel panel-default">
     <div class="panel-body">
-      <form id="contact-edit">
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm" id="contact-edit">
         <div class="row">
           <div class="col-sm-12 form-group">
             <label for="name">Name:</label>
             <input
+              name="name"
+              [ngModel]="contact.name"
               type="text"
               id="name"
+              required
               class="form-control required"
               size="120"
-              max="120">
+              max="120"
+              #contactName>
           </div>
         </div>
   
@@ -17,31 +21,50 @@
           <div class="col-sm-12 form-group">
             <label for="email">Email:</label>
             <input
+              required
+              [ngModel]="contact.email"
+              name="email"
               type="text"
               id="email"
               class="form-control required"
               size="120"
-              max="255">
+              max="255"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+              #contactEmail="ngModel">
           </div>
         </div>
-  
+        <div
+          *ngIf="!contactEmail.valid && contactEmail.touched">
+          <p class="alert alert-danger">Please enter a valid email address.</p>
+        </div>
+
         <div class="row">
           <div class="col-sm-12 form-group">
             <label for="phone">Phone:</label>
             <input
+              [ngModel]="contact.phone"
+              name="phone"
               type="text"
               id="phone"
               class="form-control invalid"
               size="150"
-              max="255">
-  
+              max="255"
+              required
+              pattern="\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*"
+              #contactPhone="ngModel">
           </div>
+        </div>
+        <div
+          *ngIf="!contactPhone.valid && contactPhone.touched">
+          <p class="alert alert-danger">Please enter a valid phone number.</p>
         </div>
   
         <div class="row">
           <div class="col-sm-12 form-group">
             <label for="imageUrl">Image URL:</label>
             <input
+              [ngModel]="contact.imageUrl"
+              name="imageUrl"
               type="text"
               id="imageUrl"
               class="form-control"
@@ -53,13 +76,22 @@
         <div class="row">
           <div class="form-group">
             <label for="groupList">Group Contacts:</label>
+            <div 
+              class="row" 
+              id="groupList"
+              
+              dnd-droppable 
+              [dropZones]="['contactGroup']" 
+              (onDropSuccess)="addToGroup($event)"
+              >
   
-            <div class="row" id="groupList"
-                style="min-height: 3rem;" >
-  
-              <div *ngFor="let contact of groupContacts; let i = index">
+              <div *ngFor="let groupContact of groupContacts; let i = index"
+                class="item-container" >
                 <div>
-                  <cms-contact-item class="col-sm-11" [contact]="contact"></cms-contact-item>
+                  <cms-contact-item 
+                    class="col-sm-10" 
+                    [contact]="groupContact">
+                  </cms-contact-item>
                   <button class="btn btn-danger col-sm-2 deleteButton" (click)="onRemoveItem(i)">X</button>
                 </div>
               </div>
@@ -68,11 +100,16 @@
   
           </div>
         </div>
-  
+        <div
+        *ngIf="(!contactName.valid && contactName.touched)|| (!contactEmail.valid && contactEmail.touched)">
+          <p class="alert alert-danger">The Contact Name and Email are required fields.</p>
+        </div>
+
   
         <div class="row">
           <div class="col-xs-12 btn-toolbar">
-            <button class="btn btn-success" type="submit">Save</button>
+            <button class="btn btn-success" type="submit"
+            [disabled]="!f.valid">Save</button>
             <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
           </div>
         </div>

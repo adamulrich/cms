@@ -51,18 +51,18 @@ export class ContactService {
     this.contactsListChangedEvent.next(this.contacts.slice());
   }
 
-  updateContact(originalDoc: Contact, newDoc: Contact) {
-    if (!newDoc && !originalDoc) {
+  updateContact(originalContact: Contact, newContact: Contact) {
+    if (!newContact && !originalContact) {
       return
     }
 
-    const position = this.contacts.indexOf(originalDoc);
+    const position = this.contacts.indexOf(originalContact);
     if (position < 0) {
       return
     }
-
-    newDoc.id = originalDoc.id;
-    this.contacts[position] = newDoc
+    
+    newContact.id = originalContact.id;
+    this.contacts[position] = newContact
 
     var contactsListClone = this.contacts.slice();
     this.contactsListChangedEvent.next(contactsListClone)
@@ -70,7 +70,7 @@ export class ContactService {
   }
   
 
-  addcontact(newcontact: Contact) {
+  addContact(newcontact: Contact) {
     if (!newcontact) {
       return
     }
