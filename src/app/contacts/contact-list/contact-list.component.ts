@@ -12,13 +12,14 @@ export class ContactListComponent implements OnInit, OnDestroy {
   @Output() selectedContactEvent = new EventEmitter<Contact>();  
   contacts: Contact[] = [];
   id: string = "";
+  term: string = "";
   private subscription: Subscription;
   constructor(private contactService: ContactService) {
       
     }
 
   ngOnInit(): void {
-    this.contacts = this.contactService.getContacts();
+    this.contactService.getContacts();
     this.subscription = this.contactService.contactsListChangedEvent.subscribe(
       (contactsList: Contact[]) => {
         this.contacts = contactsList;
@@ -30,6 +31,12 @@ export class ContactListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+
+  
+search(value: string) {
+  this.term = value;
+  
+  }
   // onSelected(contact: Contact) {
   //   this.contactService.contactSelectedEvent.emit(contact);
   // }

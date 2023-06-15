@@ -1,31 +1,62 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import {Contact} from './contact.model';
-import { MOCKCONTACTS } from './MOCKCONTACTS';
+
 import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContactService {
+export class ContactService{
 
   contacts: Contact[] = [];
   maxContactId: number = 0;
   contactsListChangedEvent = new Subject<Contact[]>();
+  urlFirebase: string = "https://cms-wdd430-b1c6c-default-rtdb.firebaseio.com/contacts.json";
 
-   constructor() {
-      this.contacts = MOCKCONTACTS;
-      this.maxContactId = this.getMaxId();
-      console.log(this.maxContactId);
-   }
+  constructor(
+    private httpClient: HttpClient) {
+    
+    }  
   
+  // compareName(a: Contact, b: Contact) {
+  //   if
+  //    (a.email > b.email) {
+  //     return 1
+  //   } else {
+  //     return -1
+  //   }
+  // }
   
-  
-   getContacts(): Contact[] {
-    return this.contacts; //.sort(this.sort_function).slice()
+  getContacts(): any {
+    this.httpClient.get<Contact[]>(this.urlFirebase).subscribe(
+      
+      // success method
+      (contacts: Contact[] ) => {
+        this.contacts = contacts;
+        this.maxContactId = this.getMaxId();
+        // sort the list of contacts
+        // this.contacts.sort(this.compareName);
+        var contactsListClone = this.contacts.slice();
+        // emit the next contact list change event
+        this.contactsListChangedEvent.next(contactsListClone)
+        return contactsListClone
+      },
+      // error method
+      (error: any) => {
+        // print the error to the console
+        console.log(error);
+      } 
+    )
   }
 
-  getContact(id: string): Contact {
-    return this.contacts.find(contact => contact.id == id);
+    getContact(id: string): Contact {
+    if (!this.contacts) {
+      this.contacts = this.getContacts();
+      return this.contacts.find(contact => contact.id == id);
+    } else {
+      return this.contacts.find(contact => contact.id == id);
+    }
   
    }
 
@@ -47,8 +78,7 @@ export class ContactService {
     if (pos < 0) {
       return;
     }
-    this.contacts.splice(pos, 1);
-    this.contactsListChangedEvent.next(this.contacts.slice());
+    this.storeContacts();
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
@@ -64,9 +94,7 @@ export class ContactService {
     newContact.id = originalContact.id;
     this.contacts[position] = newContact
 
-    var contactsListClone = this.contacts.slice();
-    this.contactsListChangedEvent.next(contactsListClone)
-
+    this.storeContacts();
   }
   
 
@@ -80,14 +108,25 @@ export class ContactService {
     newcontact.id = this.maxContactId.toString();
     this.contacts.push(newcontact);
 
-    var contactsListClone = this.contacts.slice();
-    this.contactsListChangedEvent.next(contactsListClone)
-
+    this.storeContacts();
   }
 
   getMaxId(): number  {
   
     return Math.max(...this.contacts.map(d => +d.id),0)
   }
-  
+
+
+  storeContacts() {
+    const serializedData: string = JSON.stringify(this.contacts);
+    const httpHeaders: HttpHeaders = new HttpHeaders()
+      .set('content-type', "application/json")
+      .set('Access-Control-Allow-Origin', '*');
+
+    this.httpClient.put(this.urlFirebase,serializedData,{
+      headers: httpHeaders}).subscribe( response =>
+        {
+          this.contactsListChangedEvent.next(this.contacts.slice())     
+        });
+  }
 }
