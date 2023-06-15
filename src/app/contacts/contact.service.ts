@@ -78,6 +78,7 @@ export class ContactService{
     if (pos < 0) {
       return;
     }
+    this.contacts.splice(pos,1);
     this.storeContacts();
   }
 
