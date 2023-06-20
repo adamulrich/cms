@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Message } from './message.model';
 import { MOCKMESSAGES } from './MOCKMESSAGES';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ContactService } from '../contacts/contact.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,10 @@ export class MessageService {
   urlFirebase: string = "https://cms-wdd430-b1c6c-default-rtdb.firebaseio.com/messages.json";
 
   constructor(
-    private httpClient: HttpClient) {}  
+    private httpClient: HttpClient, 
+    private contactService: ContactService) {
+  
+    }  
  
    getMessages(): any {
     this.httpClient.get<Message[]>(this.urlFirebase).subscribe(

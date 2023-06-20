@@ -30,7 +30,7 @@ export class ContactEditComponent implements OnInit, OnDestroy {
       private router: Router,
       private route: ActivatedRoute
   ) {
-
+    contactService.getContacts();
   }
 
   onCancel() {

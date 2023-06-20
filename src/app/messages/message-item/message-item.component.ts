@@ -14,9 +14,7 @@ export class MessageItemComponent implements OnInit{
   @Input() message: Message;
   messageSender: string;
   private subscription: Subscription;
-  private contacts: Contact[] = [];
-
-
+  
   constructor(private contactService: ContactService) { }
   
   async ngOnInit() {
@@ -25,7 +23,7 @@ export class MessageItemComponent implements OnInit{
     //this.contactService.getContacts();
     this.subscription = this.contactService.contactsListChangedEvent.subscribe(
       (contactsList: Contact[]) => {
-        
+      
       });
   
     const contact = this.contactService.getContact(this.message.sender);

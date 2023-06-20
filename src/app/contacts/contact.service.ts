@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class ContactService{
+export class ContactService {
 
   contacts: Contact[] = [];
   maxContactId: number = 0;
@@ -16,7 +16,7 @@ export class ContactService{
 
   constructor(
     private httpClient: HttpClient) {
-    
+      this.contacts = this.getContacts();
     }  
   
   // compareName(a: Contact, b: Contact) {
