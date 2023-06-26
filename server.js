@@ -4,6 +4,8 @@ var index = require('./server/routes/app');
 const messageRoutes = require('./server/routes/messages');
 const contactRoutes = require('./server/routes/contacts');
 const documentRoutes = require('./server/routes/documents');
+var mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
 
 var express = require('express');
 var path = require('path');
@@ -54,6 +56,19 @@ app.use('/', index);
 app.use('/messages', messageRoutes);
 app.use('/contacts', contactRoutes);
 app.use('/documents', documentRoutes);
+
+
+// establish a connection to the mongo database
+mongoose.connect('mongodb://127.0.0.1:27017/cms',
+   { useNewUrlParser: true }, (err, res) => {
+      if (err) {
+         console.log('Connection failed: ' + err);
+      }
+      else {
+         console.log('Connected to database!');
+      }
+   }
+);
 
 // Tell express to map all other non-defined routes back to the index page
 app.use(function(req,res, next) {
