@@ -9,6 +9,7 @@ let messages = [];
 router.get('/', (req, res, next) => {
     //call the Message model find() method to get all messages in the collection
     Message.find()
+    .populate("sender")
     .then(messages => {
         this.messages = messages;
         console.log(messages);
@@ -32,10 +33,10 @@ router.post('/', (req, res, next) => {
 
     const message = new Message({
         id: maxMessageId,
-        name: req.body.name,
-        description: req.body.description,
-        url: req.body.url
-    });
+        subject: req.body.subject,
+        msgText: req.body.msgText,
+        sender: req.body.sender,
+        });
 
     message.save()
         .then(createdMessage => {
@@ -55,9 +56,11 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     Message.findOne({ id: req.params.id })
         .then(message => {
-            message.name = req.body.name;
-            message.description = req.body.description;
-            message.url = req.body.url;
+            message.id = maxMessageId,
+            message.subject= req.body.subject,
+            message.msgText= req.body.msgText,
+            message.sender= req.body.sender,
+            
 
             Message.updateOne({ id: req.params.id }, message)
                 .then(result => {

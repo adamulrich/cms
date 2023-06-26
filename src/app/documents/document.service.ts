@@ -19,15 +19,6 @@ export class DocumentService {
   constructor(
     private httpClient: HttpClient) { }
 
-  compareName(a: Document, b: Document) {
-    if (a.name < b.name) {
-      return -1
-    } else {
-      return 1
-    }
-  }
-
-
   getDocuments(): any {
     this.httpClient.get<{message: String, documents: Document[]}>(this.urlExpress).subscribe(
 
