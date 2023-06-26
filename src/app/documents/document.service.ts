@@ -66,6 +66,7 @@ export class DocumentService {
 
     // set the id of the new Document to the id of the old Document
     newDocument.id = originalDocument.id;
+    // not needed. put leaves data alone if not included.
     // newDocument._id = originalDocument._id;
     
 

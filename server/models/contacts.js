@@ -16,7 +16,7 @@ const contactSchema = mongoose.Schema({
    name: { type: String, required: true },
    email: { type: String, required: true },
    phone: { type: String, required: true },
-   imageUrl: { type: String, required: true },
+   imageUrl: { type: String, required: false },
    group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Contact'}]
 });
 
