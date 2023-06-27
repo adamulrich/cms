@@ -4,6 +4,7 @@ module.exports = router;
 
 const sequenceGenerator = require('./sequenceGenerator');
 const Message = require('../models/messages');
+const { ObjectId } = require('mongodb');
 let messages = [];
 
 router.get('/', (req, res, next) => {
@@ -12,7 +13,7 @@ router.get('/', (req, res, next) => {
     .populate("sender")
     .then(messages => {
         this.messages = messages;
-        console.log(messages);
+        // console.log(messages);
         res.status(200).json({
             message: "messages fetched",
             messages: this.messages
@@ -31,18 +32,22 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
     const maxMessageId = sequenceGenerator.nextId("messages");
 
+    console.log(req.body.sender);
     const message = new Message({
         id: maxMessageId,
         subject: req.body.subject,
         msgText: req.body.msgText,
-        sender: req.body.sender,
+        
+        sender: new ObjectId(req.body.sender),
         });
 
     message.save()
-        .then(createdMessage => {
+        .then(async createdMessage => {
+            const newMessage = await createdMessage.populate("sender");
+            console.log(newMessage);
             res.status(201).json({
                 message: 'Message added successfully',
-                message: createdMessage
+                message: newMessage
             });
         })
         .catch(error => {

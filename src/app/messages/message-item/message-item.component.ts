@@ -18,23 +18,8 @@ export class MessageItemComponent implements OnInit{
   constructor(private contactService: ContactService) { }
   
   async ngOnInit() {
-    // console.log(this.message.sender);
-
-    //this.contactService.getContacts();
-    this.subscription = this.contactService.contactsListChangedEvent.subscribe(
-      (contactsList: Contact[]) => {
-      
-      });
-  
-    const contact = this.contactService.getContact(this.message.sender);
-    // console.log("contact:" + contact)
-    if (contact) {
-      console.log(this.message);
       this.messageSender = this.message.sender["name"];
-    } else {
-      this.messageSender = "";
-      // we don't have the name yet. Need to implement something async.
-    }
+
   }
 
 }

@@ -80,9 +80,10 @@ export class MessageService {
       return;
     }
 
-    // make sure id of the new Message is empty
-    message.sender = "101";
-
+  
+    //
+    
+    console.log(message.sender);
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     // add to database
